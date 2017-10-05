@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="invoiceApp">
+
+<head>
+    <title>Zola Assessment - Invoice Portal</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="app/app.css">
+
+</head>
+
+<body>
+
+    <div class="container" ng-controller="invoiceController">
+        <div class="header clearfix invoice-header">
+            <h3 class="text-muted">Zola Invoice Portal</h3>
+            <button type="button" class="btn btn-primary" ng-click="openForm('Add')">Add Invoice</button>            
+        </div>
+
+        <div class="row">
+            <table class="table table-striped">
+                <thead>
+                    <th>ID</th>
+                    <th>PO NUMBER</th>
+                    <th>Invoice Date</th>
+                    <th>Due Date</th>
+                    <th>Amount Cents</th>
+                    <th>Created At</th>
+                    <th></th>
+                </thead>
+
+                <tbody>
+                    <tr ng-repeat="invoice in invoiceList">
+                        <td>{{invoice.id}}</td>
+                        <td>{{invoice.po_number}}</td>
+                        <td>{{invoice.invoice_date}}</td>
+                        <td>{{invoice.due_date}}</td>
+                        <td>{{invoice.amount_cents}}</td>
+                        <td>{{invoice.created_at | date:'short'}}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary" ng-click="openForm('Update', invoice, $index)">Update</button>
+                            <button type="button" class="btn btn-danger" ng-click="openForm('Delete', invoice, $index)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <ul uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></ul>
+        </div>
+
+        <!-- <div class="row">
+            <div ng-include="app/components/invoicePagination.html"></div>
+        </div> -->
+    </div>
+
+    <!-- Angular Dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.6/angular-animate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-touch/1.6.6/angular-touch.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+
+    <!-- App Scripts -->
+    <script src="app/app.module.js"></script>
+    <script src="app/common/helper/formatDate.js"></script>
+    <script src="app/components/invoices/invoice.js"></script>
+    <script src="app/components/invoices/invoiceFactory.js"></script>
+    <script src="app/components/invoices/invoiceListController.js"></script>
+    <script src="app/components/invoices/invoiceFormController.js"></script>
+    <script src="app/components/invoices/invoiceDatePickerController.js"></script>
+
+
+
+</body>
+
+</html>
