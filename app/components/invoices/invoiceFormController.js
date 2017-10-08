@@ -30,14 +30,14 @@
         }
 
         $scope.$watch('invoice.invoice_date', (newval, oldval) => {
-            if(newval < $scope.invoice.due_date) {
-                $scope.form.due_date.$valid = false;
+            if($scope.invoice.invoice_date > $scope.invoice.due_date) {
+                $scope.invoice.due_date = '';
             }
         });
 
         $scope.$watch('invoice.due_date', (newval, oldval) => {
-            if(newval < $scope.invoice.invoice_date) {
-                $scope.form.due_date.$valid = false;
+            if($scope.invoice.due_date < $scope.invoice.invoice_date) {
+                $scope.invoice.due_date = '';
             }
         });
 

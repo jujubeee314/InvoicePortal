@@ -7,10 +7,11 @@
     const invoiceController = ($scope, $uibModal, invoiceFactory) => {
 
         $scope.invoiceList = []
-
         $scope.totalItems = $scope.invoiceList.length;
         $scope.currentPage = 1;
         $scope.itemsPerPage = 10;
+
+        let limit = 20;
 
         $scope.openForm = (title, invoice, index) => {
 
@@ -26,32 +27,52 @@
             });
 
             modalInstance.result.then(function (data) {
-                if (data.method === 'DELETE') { 
+                if (data.method === 'DELETE') {
                     invoiceFactory.apiInvoice(data.invoice.id, data.method)
                         .then((res) => {
-                            $scope.invoiceList.splice(data.index,1); 
-                        });                    
-                }
-                else if (data.method === 'POST') { 
-                    invoiceFactory.apiInvoice(data.invoice.id, data.method, data.invoice)
-                        .then((res) => {
-                            $scope.invoiceList.push(res); 
+                            $scope.invoiceList.splice(data.index, 1);
+                            setPagingData($scope.currentPage);
+                            limit--;
                         });
                 }
-                else if (data.method === 'PUT') { 
+                else if (data.method === 'POST') {
+                    invoiceFactory.apiInvoice(data.invoice.id, data.method, data.invoice)
+                        .then((res) => {
+                            $scope.invoiceList.push(res);
+                            $scope.totalItems = $scope.invoiceList.length;
+                            setPagingData($scope.currentPage);
+                            limit++;
+                        });
+                }
+                else if (data.method === 'PUT') {
                     invoiceFactory.apiInvoice(data.invoice.id, data.method, data.invoice);
-                    $scope.invoiceList[data.index] = res;
+                    $scope.invoiceList[data.index] = data.invoice;
+                    setPagingData($scope.currentPage);
                 };
-            }, function () {
-                console.log('Modal dismissed at: ' + new Date());
             });
 
         }
 
+        $scope.$watch("currentPage", () => {
+            setPagingData($scope.currentPage);
+        });
+
+        const setPagingData = (page) => {
+            let pagedData = $scope.invoiceList.slice(
+                (page - 1) * $scope.itemsPerPage,
+                page * $scope.itemsPerPage
+            );
+            $scope.invoices = pagedData;
+        }
+
         const init = () => {
 
-            invoiceFactory.getInvoiceList()
-                .then((res) => { $scope.invoiceList = res; });
+            invoiceFactory.getInvoiceList(limit)
+                .then((res) => {
+                    $scope.invoiceList = res;
+                    $scope.totalItems = $scope.invoiceList.length;
+                    setPagingData($scope.currentPage);
+                });
 
         }
 

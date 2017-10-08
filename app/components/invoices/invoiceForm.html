@@ -14,8 +14,14 @@
 
             <div class="form-group">
                 <label for="po_number">PO NUMBER</label>
-                <input class="form-control" id="po_number" ng-model="invoice.po_number" ng-disabled="disabled" ng-pattern="regex" ng-minlength="11"
+                <input class="form-control" name="poNumber" id="po_number" ng-model="invoice.po_number" ng-disabled="disabled" ng-pattern="regex" ng-minlength="11"
                     ng-maxlength="11" required>
+                <div ng-show="form.$submitted || form.poNumber.$touched">
+                    <span ng-show="form.poNumber.$error.required">Purchace Order Number required.</span>
+                    <span ng-show="form.poNumber.$error.ngPattern">Purchase Order Number must start with 'Z' and the next 10 character has to be a combination of 'A to F' or '0-9'.</span>
+                    <span ng-show="form.poNumber.$error.ngMinlength">Purchase Order Number must be at 11 characters.</span>
+                </div>
+                
             </div>
 
             <div class="form-group" ng-controller="invoiceDatePickerController">

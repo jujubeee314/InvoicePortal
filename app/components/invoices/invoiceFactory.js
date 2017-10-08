@@ -7,11 +7,11 @@
     const invoiceFactory = ($http, Invoice) => {
 
         let invoiceList = [];
-        let apiUrl = 'http://localhost:5000'
+        let apiUrl = 'http://localhost:5000';
 
-        const getInvoiceList = () => {
+        const getInvoiceList = (limit) => {
             return $http({
-                'url': 'http://localhost:5000/list',
+                'url': 'http://localhost:5000/list?limit=' + limit,
                 'method': 'GET'
             }).then((res) => {
                 let invoices = res.data
